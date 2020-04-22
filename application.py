@@ -1,6 +1,7 @@
 from tkinter import filedialog
 from tkinter import *
 import tkinter as tk
+import script
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -40,6 +41,10 @@ class Application(tk.Frame):
             print(file)
 
         print("Destination Directory" + root.directory)
+
+        script.main(root.files, root.directory)
+	
+        print("Script Complete")
 
 root = tk.Tk()
 root.title("Bird Call Acoustic Analysis")
