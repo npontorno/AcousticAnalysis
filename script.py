@@ -83,8 +83,10 @@ def split_into_calls():
 
 
 def split_into_syls(no_chunks):
+	no_syls = 0
+
 	for i in range(0, no_chunks):
-		bird_call = AudioSegment.from_wav('./chunk1.wav')
+		bird_call = AudioSegment.from_wav('./chunk' + str(i) + '.wav')
 
 		syllables = split_on_silence(bird_call, min_silence_len=10, silence_thresh=-30, keep_silence=False)
 
@@ -112,11 +114,9 @@ def split_into_syls(no_chunks):
 		no_syls = -1
 
 		for i, syllable in enumerate(syllables):
-			syllable.export("syl{0}.wav".format(i), format="wav")
+			syllable.export("syl{0}.wav".format(no_syls), format="wav")
 		
-			no_syls = i
-
-    		specgram(syllable.get_array_of_samples(), NFFT=256, Fs=2, noverlap=128)
+			no_syls = no_syls + 1
 	
 		return no_syls
 
