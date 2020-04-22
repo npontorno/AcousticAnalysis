@@ -30,7 +30,7 @@ def main(song_files, output_dest):
 		no_syls = split_into_syls()
 
 		print("Generating and storing 36 points of data for each syllable...")
-		
+		generate
 		
 		print("Moving to next file..."
 
@@ -121,11 +121,13 @@ def split_into_syls(no_chunks):
 		return no_syls
 
 
-def write_to_CSV(syl_data):
+def write_to_CSV(syl_data, output_dest):
 	# generate file name
 	timestr = time.strftime("%Y%m%d-%H%M%S")
+	
+	print("New file: " + output_dest+timestr)
 
-	with open(timestr, mode='w') as csv_file:
+	with open(output_dest+timestr, mode='w') as csv_file:
     	fieldnames = ['Syllable', 'pt_1_freq', 'pt_1_amp', 'pt_2_freq', 'pt_2_amp', 'pt_3_freq', 'pt_3_amp', 'pt_4_freq', 'pt_4_amp', 'pt_5_freq', 'pt_5_amp', 'pt_6_freq', 'pt_6_amp', 'pt_7_freq', 'pt_7_amp',
 		'pt_8_freq', 'pt_8_amp', 'pt_9_freq', 'pt_9_amp', 'pt_10_freq', 'pt_10_amp', 'pt_11_freq', 'pt_11_amp', 'pt_12_freq', 'pt_12_amp', 'pt_13_freq', 'pt_13_amp', 'pt_14_freq', 'pt_14_amp', 
 		'pt_15_freq', 'pt_15_amp', 'pt_16_freq', 'pt_16_amp','pt_17_freq', 'pt_17_amp', 'pt_18_freq', 'pt_18_amp']
@@ -141,3 +143,11 @@ def write_to_CSV(syl_data):
 			 'pt_14_amp' : syllable[27], 'pt_15_freq' : syllable[28], 'pt_15_amp' : syllable[29], 'pt_16_freq' : syllable[30], 'pt_16_amp' : syllable[31] ,'pt_17_freq' : syllable[32], 'pt_17_amp':syllable[33], 
 			'pt_18_freq' : syllable[34], 'pt_18_amp': syllable[35]})
     	
+
+def generate_data_points(no_syls, data):
+	for i in range(0, no_syls):
+        bird_call = AudioSegment.from_wav('./syl' + str(i) + '.wav')
+		print("Getting data for syllable " + str(i))
+
+		data.append([1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9])
+ 
