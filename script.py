@@ -86,12 +86,12 @@ def split_into_calls():
     	silence_thresh = -30
 	)
 
-	no_chunks = -1
+	no_chunks = 0
 
 	for i, chunk in enumerate(chunks):	
-		chunk.export("chunk{0}.wav".format(i), format="wav")
+		chunk.export("chunk{0}.wav".format(no_chunks), format="wav")
 		
-		no_chunks = i
+		no_chunks = no_chunks + 1
 	
 	# remember to remove these chunks after
 	return no_chunks
@@ -141,9 +141,56 @@ def write_to_CSV(syl_data, output_dest):
 
 def generate_data_points(no_syls, data):
 	for i in range(0, no_syls):
-		bird_call = AudioSegment.from_wav('./syl' + str(i) + '.wav')
-		print("Getting data for syllable " + str(i))
+		bird_syl = AudioSegment.from_wav('./syl' + str(i) + '.wav')
+		
+		print("Splitting syllable into 18 equally long segments")
+		print("Length of whole syllable: " + str(len(bird_syl)))
+		
+		leng_div_18 = len(bird_syl) / 18
+		curr_position = 0
+		new_seg = []
+		syl_data = []
 
-		data.append([1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9])
+		for i in range(0, 18):
+			if i is 0:
+				new_seg = bird_syl[:curr_position + leng_div_18]
+			elif i is 17:
+				new_seg = bird_syl[curr_position:]
+			else:
+				new_seg = bird_syl[curr_position:curr_position + leng_div_18]
+
+			# make new file from shortened seg
+			new_seg.export('seg.wav', format="wav")
+			
+			y, sr = librosa.load('seg.wav', None, True, 0, None)
+
+			syl_data.append(avg_frequency(y, sr))
+			syl_data.append(avg_amplitude(y))
+
+			os.remove("seg.wav")
+
+			curr_position = curr_position + leng_div_18
+
+		
+		data.append(syl_data)
 	
 	return data
+
+
+def avg_amplitude(y: np.ndarray) -> float:
+
+	ampSum = 0
+	z = librosa.core.amplitude_to_db(S=y)
+    
+	for i in range(len(z)):
+		ampSum += abs(z[i])
+    
+	avg = ampSum/len(z)
+	return avg
+
+def avg_frequency(y: np.ndarray, fs: int) -> float:
+	spec = np.abs(np.fft.rfft(y))
+	freq = np.fft.rfftfreq(len(y), d=1/fs)    
+	amp = spec / spec.sum()
+	mean = (freq * amp).sum()
+	return mean
