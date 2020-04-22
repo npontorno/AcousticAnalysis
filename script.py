@@ -14,6 +14,7 @@ from pydub.silence import detect_nonsilent
 import itertools
 import csv
 import time
+import os
 
 
 def main(song_files, output_dest):
@@ -33,6 +34,17 @@ def main(song_files, output_dest):
 
 		print("Generating and storing 36 points of data for each syllable...")
 		data = generate_data_points(no_syls, data)
+
+		print("Deleting chunks")
+		for i in range(0, no_chunks):
+			os.remove("chunk" + str(i) + ".wav")
+
+		print("Deleting syllables")
+		for i in range(0, no_syls):
+			os.remove("syl" + str(i) + ".wav")
+
+		print("Deleting Reduced Noise File")
+		os.remove("reduced_noise_file.wav")
 
 		print("Moving to next file...")
 
