@@ -9,6 +9,7 @@ class Application(tk.Frame):
         self.master = master
         self.grid()
         self.create_widgets()
+        root.directory = './Results'
 
     def create_widgets(self):
         self.select_files = tk.Button(self)

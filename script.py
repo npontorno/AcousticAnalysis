@@ -108,8 +108,6 @@ def split_into_syls(no_chunks):
 		# pydub functions for testing
 		nonsilent_ranges = detect_nonsilent(bird_call, min_silence_len=10, silence_thresh=-30)
 
-		no_syls = -1
-
 		for i, syllable in enumerate(syllables):
 			syllable.export("syl{0}.wav".format(no_syls), format="wav")
 		
