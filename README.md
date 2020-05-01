@@ -36,7 +36,7 @@ pip install scipy
 pip install matplotlib
 ```
 
-### Running the program
+### Running the Program
 
 To run the program, enter this code into the terminal. 
 ```
